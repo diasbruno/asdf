@@ -1,0 +1,20 @@
+body {
+    font-family: Helvetica, Arial, sans-serif;
+    font-weight: 100;
+}
+
+.code-view {
+    margin: 50px 0 0 50px;
+    padding: 5px;
+    display: inline-block;
+    border-bottom: 1px solid #333;
+}
+
+.code-view > * {
+    display: inline-block;
+}
+
+.fn-name {
+    margin: 0;
+    font-size: 14px;
+}
