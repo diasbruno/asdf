@@ -1,27 +1,23 @@
-/*global require */
+/*global require, $ */
 
 var asdf = require("../src/renderers.js");
+var objs = require("../src/objects.js");
 
-var exp = {
-  "type": 8,
-  "name": "id",
-  "type_terms": [{
-    type: 5,
-    name: "lalpha"
-  }],
-  "fn_terms": [{
-    type: 2,
-    name: "x",
-    has_type: {
-      type: 4,
-      name: "lalpha"
-    }
-  }],
-  "fn_body": [{
-    type: 1,
-    name: "x"
-  }]
+var create_type = document.getElementById("create-type");
+var create_fn   = document.getElementById("create-fn");
+
+create_type.onclick = function(ev) {
+  // console.log("type", ev);
 };
 
-var rendered_exp = asdf.render(exp);
-document.body.innerHTML = rendered_exp;
+create_fn.onclick = function(ev) {
+  // console.log("fn", ev);
+};
+
+function build(data) {
+  var exp = asdf.render(data);
+  document.body.appendChild(exp);
+}
+
+$.get('id.json', build);
+$.get('typeU.json', build);

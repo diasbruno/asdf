@@ -4,13 +4,34 @@ var types = require("./type.js");
 
 module.exports = {
   render: function(exp) {
-    var str = "<div class=\"code-view\">";
+    switch (exp.type) {
+    case types.FUNCTION_EXP: {
+      return this.render_function_exp(exp);
+    } break;
+    case types.TYPE_EXP: {
+      return this.render_type_exp(exp);
+    } break;
+    }
+    throw new Error("Cannot render expression:", exp);
+  },
+  render_function_exp: function(exp) {
+    var str = "",
+        wrapper = document.createElement("div");
+    wrapper.className = "code-view exp-fn";
     str += this.name(exp.name);
     str += this.type_terms(exp.type_terms);
     str += this.fn_terms(exp.fn_terms);
     str += this.fn_body(exp.fn_body);
-    str += "<\/div>";
-    return str;
+    wrapper.innerHTML = str;
+    return wrapper;
+  },
+  render_type_exp: function(exp) {
+    var str = "",
+        wrapper = document.createElement("div");
+    wrapper.className = "code-view exp-type";
+    str += exp.name;
+    wrapper.innerHTML = str;
+    return wrapper;
   },
   name: function(name) {
     return "<h6 class=\"fn-name\">" + name + "</h6>:</span>";
@@ -22,7 +43,7 @@ module.exports = {
     var str = "", term_name;
     for (var a in ls) {
       term_name = ls[a].name;
-      str += this.type_term(types.GREEK.ulambda + types.GREEK[term_name]);
+      str += this.type_term(types.GREEK.ulambda + term_name);
       str += "<span>.</span>";
     }
     return str;
@@ -32,7 +53,7 @@ module.exports = {
   },
   fn_term_type: function(type) {
     if (type) {
-      return "<sup>" + types.GREEK[type.name] + "</sup>";
+      return "<sup>" + type.name + "</sup>";
     }
     return "";
   },

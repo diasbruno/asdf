@@ -18,3 +18,13 @@ body {
     margin: 0;
     font-size: 14px;
 }
+
+/* Type */
+
+.exp-type {
+    border-bottom: 1px solid #FF0000;
+}
+
+.exp-fn {
+    border-bottom: 1px solid #FF00FF;
+}
