@@ -2,6 +2,7 @@
 
 var asdf = require("../src/renderers.js");
 var objs = require("../src/objects.js");
+var ev = require("../src/eval.js");
 
 var create_type = document.getElementById("create-type");
 var create_fn   = document.getElementById("create-fn");
@@ -19,5 +20,15 @@ function build(data) {
   document.body.appendChild(exp);
 }
 
-$.get('id.json', build);
-$.get('typeU.json', build);
+var promise1 = $.ajax("id.json");
+var promise2 = $.ajax("typeU.json");
+
+$.when(promise1, promise2).done(function(data1, data2) {
+  var as = [data1[0], data2[0]];
+  for (var a in as) {
+    var data = as[a];
+    build(data);
+  }
+
+  build(ev.eval_exp(data1[0], data2[0]));
+});

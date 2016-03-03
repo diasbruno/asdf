@@ -4,7 +4,7 @@
   "description": "System F",
   "main": "index.js",
   "scripts": {
-    "test": "mocha tests/tests.js"
+    "test": "mocha tests/tests.js -w"
   },
   "author": "Bruno Dias <and.coffee.code@gmail.com>",
   "license": "MIT",

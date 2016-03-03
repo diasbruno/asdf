@@ -1,1 +1,26 @@
-{"type":8,"name":"id","type_terms":[{"type":5,"name":"Y"}],"fn_terms":[{"type":2,"name":"x","has_type":{"type":4,"name":"Y"}}],"fn_body":[{"type":7,"name":"x"}]}
+{
+  "fn_body": [
+    {
+      "name": "x",
+      "type": 7
+    }
+  ],
+  "fn_terms": [
+    {
+      "has_type": {
+        "name": "Y",
+        "type": 4
+      },
+      "name": "x",
+      "type": 2
+    }
+  ],
+  "type_terms": [
+    {
+      "name": "Y",
+      "type": 5
+    }
+  ],
+  "name": "id",
+  "type": 8
+}
