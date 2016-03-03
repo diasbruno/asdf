@@ -4,6 +4,7 @@ var assert = require('assert');
 var fs = require('fs');
 var _ = require('lodash');
 var ev = require('../src/eval');
+var should = require('should');
 
 var types = require('../src/type.js');
 
@@ -17,7 +18,7 @@ var typeU = readJson('typeU.json');
 describe('Eval system f expressions.', function() {
   describe('eval function with type.', function () {
     it('should return a function applied with a given type.', function () {
-      assert.equal(ev.eval_exp(idFn, typeU), {
+      ev.eval_exp(idFn, typeU).should.be.eql({
         "type": 8,
         "type_terms": [],
         "fn_terms": [{
