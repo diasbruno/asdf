@@ -1,6 +1,4 @@
-/*global module */
-
-module.exports = {
+export default {
   LITERAL:            1, // litaral.
   VARIABLE:           2, // simple variable.
 
@@ -20,6 +18,14 @@ module.exports = {
     "lalpha": "&#x1D6C2;",
     "rarrow": "&rarr;",
     "lbeta": "&#x1D6C3;"
-  }
+  },
 
+  assert_apply_type: function (a) {
+    if (a.type != this.FUNCTION_EXP) {
+      throw new Error("Cannot apply a type in a non-function.");
+    }
+    if (!a.type_terms && a.type_terms.length === 0) {
+      throw new Error("Cannot apply type to function.");
+    }
+  }
 };

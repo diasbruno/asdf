@@ -1,8 +1,6 @@
-/*global module, require */
+import * as types from "./types";
 
-var types = require("./type.js");
-
-module.exports = {
+export default {
   render: function(exp) {
     switch (exp.type) {
     case types.FUNCTION_EXP: {
@@ -29,31 +27,34 @@ module.exports = {
     var str = "",
         wrapper = document.createElement("div");
     wrapper.className = "code-view exp-type";
-    str += exp.name;
+    str += this.name(exp.name);
     wrapper.innerHTML = str;
     return wrapper;
   },
   name: function(name) {
-    return "<h6 class=\"fn-name\">" + name + "</h6>:</span>";
+    if (!name || name === "") {
+      name = "<no name>";
+    }
+    return `<h6 class="fn-name">${name}</h6>:</span>`;
   },
   type_term: function(term) {
-    return "<span class=\"type-term\">" + term + "</span>";
+    return `<span class="type-term">${term}</span>`;
   },
   type_terms: function(ls) {
     var str = "", term_name;
     for (var a in ls) {
       term_name = ls[a].name;
       str += this.type_term(types.GREEK.ulambda + term_name);
-      str += "<span>.</span>";
+      str += `<span>.</span>`;
     }
     return str;
   },
   fn_term: function(term, type) {
-    return "<span class=\"fn-term\">" + types.GREEK.llambda + term + this.fn_term_type(type) + "</span>";
+    return `<span class="fn-term">${types.GREEK.llambda}${term}${this.fn_term_type(type)}</span>`;
   },
   fn_term_type: function(type) {
     if (type) {
-      return "<sup>" + type.name + "</sup>";
+      return `<sup>${type.name}</sup>`;
     }
     return "";
   },
@@ -63,7 +64,7 @@ module.exports = {
       term_name = ls[a].name;
       term_type = ls[a].has_type;
       str += this.fn_term(term_name, term_type);
-      str += "<span>.</span>";
+      str += `<span>.</span>`;
     }
     return str;
   },

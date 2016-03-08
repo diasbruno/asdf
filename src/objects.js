@@ -1,8 +1,8 @@
-/*global module, require */
+"use strict";
 
-var types = require("./type.js");
+import * as types from "./types";
 
-module.exports = {
+export default {
   term: function(type, name) {
     return {
       "type": type,
@@ -14,7 +14,7 @@ module.exports = {
   },
   fn_term: function(name, type) {
     var term = this.term(types.VARIABLE, name);
-    term["has_type"] = type;
+    term.has_type = type;
     return term;
   },
   fn_body: function(name) {

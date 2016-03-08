@@ -20,6 +20,27 @@ describe('Eval system f expressions.', function() {
     it('should return a function applied with a given type.', function () {
       ev.eval_exp(idFn, typeU).should.be.eql({
         "type": 8,
+        "name": "",
+        "type_terms": [],
+        "fn_terms": [{
+          "has_type": {
+            "name": "U",
+            "type": 4
+          },
+          "name": "x",
+          "type": 2
+        }],
+        "fn_body": [{
+          "name": "x",
+          "type": 7
+        }]
+      });
+    });
+
+    it('should return a function applied with a given type.', function () {
+      ev.eval_exp(idFn, typeU).should.be.eql({
+        "type": 8,
+        "name": "",
         "type_terms": [],
         "fn_terms": [{
           "has_type": {

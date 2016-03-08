@@ -1,5 +1,6 @@
-/*global require, $ */
+/*global require */
 
+var $ = require('jquery');
 var asdf = require("../src/renderers.js");
 var objs = require("../src/objects.js");
 var ev = require("../src/eval.js");
