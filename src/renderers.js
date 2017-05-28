@@ -1,78 +1,83 @@
 import * as types from "./types";
 
-export default {
-  render: function(exp) {
-    switch (exp.type) {
-    case types.FUNCTION_EXP: {
-      return this.render_function_exp(exp);
-    } break;
-    case types.TYPE_EXP: {
-      return this.render_type_exp(exp);
-    } break;
-    }
-    throw new Error("Cannot render expression:", exp);
-  },
-  render_function_exp: function(exp) {
-    var str = "",
-        wrapper = document.createElement("div");
-    wrapper.className = "code-view exp-fn";
-    str += this.name(exp.name);
-    str += this.type_terms(exp.type_terms);
-    str += this.fn_terms(exp.fn_terms);
-    str += this.fn_body(exp.fn_body);
-    wrapper.innerHTML = str;
-    return wrapper;
-  },
-  render_type_exp: function(exp) {
-    var str = "",
-        wrapper = document.createElement("div");
-    wrapper.className = "code-view exp-type";
-    str += this.name(exp.name);
-    wrapper.innerHTML = str;
-    return wrapper;
-  },
-  name: function(name) {
-    if (!name || name === "") {
-      name = "<no name>";
-    }
-    return `<h6 class="fn-name">${name}</h6>:</span>`;
-  },
-  type_term: function(term) {
-    return `<span class="type-term">${term}</span>`;
-  },
-  type_terms: function(ls) {
-    var str = "", term_name;
-    for (var a in ls) {
-      term_name = ls[a].name;
-      str += this.type_term(types.GREEK.ulambda + term_name);
-      str += `<span>.</span>`;
-    }
-    return str;
-  },
-  fn_term: function(term, type) {
-    return `<span class="fn-term">${types.GREEK.llambda}${term}${this.fn_term_type(type)}</span>`;
-  },
-  fn_term_type: function(type) {
-    if (type) {
-      return `<sup>${type.name}</sup>`;
-    }
-    return "";
-  },
-  fn_terms: function(ls) {
-    var str = "", term_name, term_type;
-    for (var a in ls) {
-      term_name = ls[a].name;
-      term_type = ls[a].has_type;
-      str += this.fn_term(term_name, term_type);
-      str += `<span>.</span>`;
-    }
-    return str;
-  },
-  fn_body: function(ls) {
-    var str = "";
-    for (var a in ls) {
-      str += ls[a].name;
-    }
-    return str;
+export function render(exp) {
+  switch (exp.type) {
+  case types.FUNCTION_EXP: {
+    return render_function_exp(exp);
+  } break;
+  case types.TYPE_EXP: {
+    return render_type_exp(exp);
+  } break;
   }
-};
+  throw new Error("Cannot render expression:", exp);
+}
+
+export function render_function_exp(exp) {
+  return (
+    <div className="code-view exp-fn">
+      {name(exp.name)}
+      {type_terms(exp.type_terms)}
+      {fn_terms(exp.fn_terms)}
+      {fn_body(exp.fn_body)}
+    </div>
+  );
+}
+
+export function render_type_exp(exp) {
+  return (
+    <div className="code-view exp-type">
+      {name(exp.name)}
+    </div>
+  );
+}
+
+export function name(name) {
+  if (!name || name === "") {
+    return null;
+  }
+
+  return (
+    <h6 className="fn-name">{name}</h6>
+  );
+}
+
+export function type_term(term) {
+  return <span class="type-term">{term}</span>;
+}
+
+export function type_terms(ls) {
+  return ls.map(term => (
+    <span>
+      {type_term(types.GREEK.ulambda + term)}
+      <span>.</span>
+    </span>
+  ));
+}
+
+export function fn_term(term, type) {
+  return (
+    <span class="fn-term">
+      {types.GREEK.llambda}{term}{fn_term_type(type)}
+    </span>
+  );
+}
+
+export function fn_term_type(type) {
+  if (type) {
+    return <sup>{type.name}</sup>;
+  }
+  return null;
+}
+
+export function fn_terms(ls) {
+  return ls.map(term => (
+    <span>
+      {fn_term(term.name, term.has_type)}
+      <span>.</span>
+    </span>
+  ));
+}
+
+export function fn_body(ls) {
+  return ls.map(term => <span>{term.name}</span>);
+}

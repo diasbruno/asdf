@@ -28,3 +28,54 @@ body {
 .exp-fn {
     border-bottom: 1px solid #FF00FF;
 }
+
+.database-list {
+    height: 100vh;
+    background-color: #fafafa;
+}
+
+input[type=text] {
+    width: 100%;
+    border: none;
+    padding: 5px;
+    border-bottom: 1px solid #ccc;
+}
+
+.pure-button {
+    border-radius: 0;
+}
+
+.view-container {
+    padding: 15px 30px;
+}
+
+.graph {
+    position: relative;
+    height: 100vh;
+}
+
+.node {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: initial;
+    height: 30px;
+    background-color: #f00;
+    color: #fff;
+}
+
+.node.empty {
+    width: 50px;
+}
+
+.node .close {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 10px;
+    height: 10px;
+}
+
+.node input[type=text] {
+    color: #000;
+}

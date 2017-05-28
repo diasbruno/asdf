@@ -1,0 +1,4 @@
+export const CREATE_NODE = "CREATE_NODE";
+export const REMOVE_NODE = "REMOVE_NODE";
+export const UPDATE_NODE_TEXT = "UPDATE_NODE_TEXT";
+export const SELECTED_NODE = "SELECTED_NODE";
