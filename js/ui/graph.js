@@ -94,7 +94,6 @@ const Node = connect(
       <div ref={r => { this.ref = r; }}
         key={nid} className={`node ${text.length == 0 ? "empty" : ""}`}
         onClick={this.selectNode}>
-        <div className="close" onClick={this.forwardRemove}>x</div>
         <span>{text}</span>
       </div>
     );
