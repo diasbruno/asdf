@@ -67,11 +67,6 @@ const Node = connect(
     initPoX = event.pageX - nodeFrame.left;
     initPoY = event.pageY - nodeFrame.top;
 
-    console.log(
-      !!this.ref && event.target == this.ref && !this.state.isdragging,
-      this.state.isdragging
-    );
-
     if (event.target == this.ref && !this.state.isdragging) {
       this.setState({
         ...this.state,
