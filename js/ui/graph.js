@@ -116,6 +116,31 @@ function actualInputValue(event) {
   return value + (keyboardEventHasCtrlChar(event) ? "" : event.key);
 }
 
+const GREEK = {
+  "lalpha": "&#x1D6C2;",
+  "rarrow": "&rarr;",
+  "larrow": "&larr;",
+  "lbeta": "&#x1D6C3;",
+  "gamma": "Γ",
+  "ppi": "Π",
+  "mu": "μ",
+  "eta": "η",
+  "theta": "θ",
+  "pho": "ρ",
+  "pi": "π",
+  "type": "Λ",
+  "fn": "λ",
+  "and": "∧",
+  "or": "∨",
+  "forall": "∀",
+  "exists": "∃",
+  "nexists": "∄",
+  "empty": "∅",
+  "top": "⊤",
+  "bottom": "⊥",
+  "gf": "∘"
+};
+
 const GraphView = connect(
   state => _.pick(state.graph, ['nodes', 'selected']),
   dispatch => bindActionCreators({ createNode, updateNodeText }, dispatch)
@@ -128,7 +153,13 @@ const GraphView = connect(
   return (
     <div>
       <input className="pure-input" type="text" name="text" onKeyDown={(event) => {
-          props.selected.chain(nid => props.updateNodeText(nid, actualInputValue(event)));
+          let text = actualInputValue(event);
+          const word = /\:([A-Za-z0-9]+)/.exec(text);
+          if (word && word[1] in GREEK) {
+            text = text.replace(":"+word[1], GREEK[word[1]]);
+            event.target.value = text;
+          }
+          props.selected.chain(nid => props.updateNodeText(nid, text));
         }} />
       <div className="pure-g">
         <button className="pure-button" onClick={props.createNode}>Add</button>
