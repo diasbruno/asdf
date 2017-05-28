@@ -46,7 +46,7 @@ const Node = connect(
     this.setState({
       ...this.state,
       isdragging: false
-    }, function() {
+    }, () => {
       document.removeEventListener('mousemove', this.mouseMove);
       this.props.removeNode(this.props.nid);
     });
@@ -120,7 +120,7 @@ function actualInputValue(event) {
 const GraphView = connect(
   state => _.pick(state.graph, ['nodes', 'selected']),
   dispatch => bindActionCreators({ createNode, updateNodeText }, dispatch)
-)(function(props) {
+)(props => {
   const nodes = _.map(props.nodes, node => (
     <Node key={node.nid}
           isCurrent={Some(node.nid).equals(props.selected)}
