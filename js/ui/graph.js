@@ -7,6 +7,7 @@ import {
   CREATE_NODE, REMOVE_NODE, UPDATE_NODE_TEXT,
   SELECTED_NODE
 } from 'app/constants';
+import { clamp } from 'app/math';
 
 function createNode() {
   return { type: CREATE_NODE };
@@ -30,8 +31,6 @@ let initPoX = 0;
 let initPoY = 0;
 
 const px = value => value + "px";
-
-const clamp = (min, v, max) => Math.min(max, Math.max(min, v));
 
 const Node = connect(
   (state, props) => ({ ...props, isCurrent: Some(props.nid).equals(state.graph.selected) }),
