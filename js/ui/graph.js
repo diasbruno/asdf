@@ -58,37 +58,42 @@ const Node = connect(
   }
 
   mouseMove = (event) => {
-    const fY = event.pageY - initPoY - graphFrame.top;
-    const fX = event.pageX - initPoX - graphFrame.left;
-    const nodeFrame = domNode.getBoundingClientRect();
-    domNode.style.top = px(clamp(0, fY, graphFrame.height - nodeFrame.height));
-    domNode.style.left = px(clamp(0, fX, graphFrame.width - nodeFrame.width));
+    if (domNode) {
+      const node = findDOMNode(this);
+      const fY = event.pageY - initPoY - graphFrame.top;
+      const fX = event.pageX - initPoX - graphFrame.left;
+      const nodeFrame = node.getBoundingClientRect();
+      domNode.style.top = px(clamp(0, fY, graphFrame.height - nodeFrame.height));
+      domNode.style.left = px(clamp(0, fX, graphFrame.width - nodeFrame.width));
+    }
   }
 
   selectNode = (event) => {
-    const node = findDOMNode(this.ref);
-    const nodeFrame = node.getBoundingClientRect();
-    domNode = node;
-    initPoX = event.pageX - nodeFrame.left;
-    initPoY = event.pageY - nodeFrame.top;
-
-    if (event.target == this.ref && !this.state.isdragging) {
-      this.setState({
-        ...this.state,
-        isdragging: true
-      }, () => {
-        document.addEventListener('mousemove', this.mouseMove);
-      });
-    }
-    if (this.state.isdragging) {
-      this.setState({
-        ...this.state,
-        isdragging: false
-      }, () => {
-        document.removeEventListener('mousemove', this.mouseMove);
-      });
-    }
     !this.props.isCurrent && this.props.selectNode(this.props.nid);
+  }
+
+  toggleDragging = (event) => {
+    const node = findDOMNode(this);
+    const nodeFrame = node.getBoundingClientRect();
+    const { isdragging } = this.state;
+
+    if (!isdragging) {
+      domNode = node;
+      initPoX = event.pageX - nodeFrame.left;
+      initPoY = event.pageY - nodeFrame.top;
+    } else {
+      domNode = null;
+      initPoX = 0;
+      initPoY = 0;
+    }
+
+    this.setState({
+      ...this.state,
+      isdragging: !isdragging
+    }, () => {
+      const toggleListener = isdragging ? 'removeEventListener' : 'addEventListener';
+      document.body[toggleListener]('mousemove', this.mouseMove);
+    });
   }
 
   render() {
@@ -96,9 +101,10 @@ const Node = connect(
     const { nid, text, isCurrent } = this.props;
 
     return (
-      <div ref={r => { this.ref = r; }}
-        key={nid} className={`node ${isCurrent ? "selected" : ""} ${text.length == 0 ? "empty" : ""}`}
-        onClick={this.selectNode}>
+      <div key={nid} className={`node ${isCurrent ? "selected" : ""} ${text.length == 0 ? "empty" : ""}`}
+           onMouseDown={this.toggleDragging}
+           onMouseUp={this.toggleDragging}
+           onClick={this.selectNode}>
         <span>{text}</span>
       </div>
     );
