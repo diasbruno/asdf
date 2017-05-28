@@ -61,6 +61,7 @@ input[type=text] {
     padding: 5px 8px;
     width: initial;
     background-color: #fff;
+    color: #ccc;
     border: 1px solid #ccc;
 }
 
@@ -74,7 +75,8 @@ input[type=text] {
 }
 
 .node.selected {
-    border: 1px solid #000;
+    border: 1px solid #333;
+    color: #333;
 }
 
 .node .close {
