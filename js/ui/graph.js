@@ -3,19 +3,19 @@ import { Some, None } from 'app/functional';;
 import React, { Component } from 'react';
 import { findDOMNode } from 'react-dom';
 import { connect, bindActionCreators } from "app/state";
+import { clamp } from 'app/math';
 import {
   CREATE_NODE, REMOVE_NODE, UPDATE_NODE_TEXT,
   SELECTED_NODE, DESELECTED_NODE,
   GREEK
 } from 'app/constants';
-import { clamp } from 'app/math';
 
 function createNode() {
   return { type: CREATE_NODE };
 }
 
-function selectNode(nid) {
-  return { type: SELECTED_NODE, nid };
+function selectNode(nid, swap) {
+  return { type: SELECTED_NODE, nid, swap };
 }
 
 function deselectNode() {
@@ -38,7 +38,10 @@ let initPoY = 0;
 const px = value => value + "px";
 
 const Node = connect(
-  (state, props) => ({ ...props, isCurrent: Some(props.nid).equals(state.graph.selected) }),
+  (state, props) => ({
+    ...props,
+    isSelected: _.includes(state.graph.selected, props.nid)
+  }),
   dispatch => bindActionCreators({ removeNode, selectNode }, dispatch)
 )(class _Node extends Component {
   constructor(props) {
@@ -69,7 +72,7 @@ const Node = connect(
   }
 
   selectNode = (event) => {
-    !this.props.isCurrent && this.props.selectNode(this.props.nid);
+    !this.props.isSelected && this.props.selectNode(this.props.nid, !event.nativeEvent.shiftKey);
   }
 
   toggleDragging = (event) => {
@@ -98,10 +101,10 @@ const Node = connect(
 
   render() {
     const { editing } = this.state;
-    const { nid, text, isCurrent } = this.props;
+    const { nid, text, isSelected } = this.props;
 
     return (
-      <div key={nid} className={`node ${isCurrent ? "selected" : ""} ${text.length == 0 ? "empty" : ""}`}
+      <div key={nid} className={`node ${isSelected ? "selected" : ""} ${text.length == 0 ? "empty" : ""}`}
            onMouseDown={this.toggleDragging}
            onMouseUp={this.toggleDragging}
            onClick={this.selectNode}>
@@ -149,7 +152,7 @@ const GraphView = connect(
 
   forwardDeselectNode = event => {
     const { selected } = this.props;
-    const isDeselecting = this.isGraph(event.target) && !None.equals(selected);
+    const isDeselecting = this.isGraph(event.target) && selected.length > 0;
     isDeselecting && this.props.deselectNode();
   }
 
@@ -162,6 +165,7 @@ const GraphView = connect(
               {...node}  />
       )
     );
+
     return (
       <div>
         <input className="pure-input" type="text" name="text" onKeyDown={(event) => {
@@ -182,6 +186,5 @@ const GraphView = connect(
     );
   }
 });
-
 
 export default GraphView;

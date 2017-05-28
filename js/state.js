@@ -1,5 +1,4 @@
 import React from "react";
-import { Some, None } from 'fantasy-options';
 export { Provider, connect } from 'react-redux';
 import { combineReducers, createStore } from 'redux';
 export {
@@ -36,7 +35,7 @@ const initialState = {};
 
 const graphInitialState = {
   nodes: {},
-  selected: None
+  selected: []
 };
 
 function graphState(state, action) {
@@ -49,14 +48,15 @@ function graphState(state, action) {
   case REMOVE_NODE: {
     const nodes = { ...state.nodes };
     delete nodes[action.nid];
-    return { ...state, nodes, selected: Some(action.nid).equals(state.selected) ? None : state.selected };
+    return { ...state, nodes, selected: [] };
   } break;
   case SELECTED_NODE: {
-    const node = Some(action.nid);
-    return { ...state, selected: node };
+    const newSelection = [action.nid];
+    const selected = action.swap ? newSelection : state.selected.concat(newSelection);
+    return { ...state, selected };
   } break;
   case DESELECTED_NODE: {
-    return { ...state, selected: None };
+    return { ...state, selected: [] };
   } break;
   case UPDATE_NODE_TEXT: {
     const { text, nid } = action;
