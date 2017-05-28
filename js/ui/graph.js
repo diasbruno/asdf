@@ -109,10 +109,9 @@ function keyboardEventWasCleanUp(event) {
 }
 
 function actualInputValue(event) {
-  console.log(event.nativeEvent.target.selectionEnd, event.nativeEvent.target.selectionStart);
   let value = event.target.value;
   if (event.keyCode == 8) {
-    value = keyboardEventWasCleanUp(event) ? "" : value.slice(0, value.length - ((event.nativeEvent.target.selectionEnd - event.nativeEvent.target.selectionStart > 0 ? event.nativeEvent.target.selectionEnd - event.nativeEvent.target.selectionStart : - 1)));
+    value = keyboardEventWasCleanUp(event) ? "" : value.slice(0, value.length - 1);
   }
   return value + (keyboardEventHasCtrlChar(event) ? "" : event.key);
 }
