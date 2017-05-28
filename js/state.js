@@ -11,7 +11,7 @@ import LogMonitor from 'redux-devtools-log-monitor';
 import DockMonitor from 'redux-devtools-dock-monitor';
 import {
   CREATE_NODE, REMOVE_NODE, UPDATE_NODE_TEXT,
-  SELECTED_NODE
+  SELECTED_NODE, DESELECTED_NODE
 } from 'app/constants';
 
 // createDevTools takes a monitor and produces a DevTools component
@@ -54,6 +54,9 @@ function graphState(state, action) {
   case SELECTED_NODE: {
     const node = Some(action.nid);
     return { ...state, selected: node };
+  } break;
+  case DESELECTED_NODE: {
+    return { ...state, selected: None };
   } break;
   case UPDATE_NODE_TEXT: {
     const { text, nid } = action;
