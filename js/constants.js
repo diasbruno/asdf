@@ -4,7 +4,7 @@ export const UPDATE_NODE_TEXT = "UPDATE_NODE_TEXT";
 export const SELECTED_NODE = "SELECTED_NODE";
 export const DESELECTED_NODE = "DESELECTED_NODE";
 
-const GREEK = {
+export const GREEK = {
   "lalpha": "&#x1D6C2;",
   "rarrow": "&rarr;",
   "larrow": "&larr;",
