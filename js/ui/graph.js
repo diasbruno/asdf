@@ -88,11 +88,11 @@ const Node = connect(
 
   render() {
     const { editing } = this.state;
-    const { nid, text } = this.props;
+    const { nid, text, isCurrent } = this.props;
 
     return (
       <div ref={r => { this.ref = r; }}
-        key={nid} className={`node ${text.length == 0 ? "empty" : ""}`}
+        key={nid} className={`node ${isCurrent ? "selected" : ""} ${text.length == 0 ? "empty" : ""}`}
         onClick={this.selectNode}>
         <span>{text}</span>
       </div>

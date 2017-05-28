@@ -58,14 +58,23 @@ input[type=text] {
     position: absolute;
     top: 0;
     left: 0;
+    padding: 5px 8px;
     width: initial;
-    height: 30px;
-    background-color: #f00;
-    color: #fff;
+    background-color: #fff;
+    border: 1px solid #ccc;
+}
+
+.node span {
+    pointer-events: none;
 }
 
 .node.empty {
-    width: 50px;
+    width: 20px;
+    height: 20px;
+}
+
+.node.selected {
+    border: 1px solid #000;
 }
 
 .node .close {
