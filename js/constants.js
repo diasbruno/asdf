@@ -3,6 +3,8 @@ export const REMOVE_NODE = "REMOVE_NODE";
 export const UPDATE_NODE_TEXT = "UPDATE_NODE_TEXT";
 export const SELECTED_NODE = "SELECTED_NODE";
 export const DESELECTED_NODE = "DESELECTED_NODE";
+export const CREATE_EDGE = "CREATE_EDGE";
+export const REMOVE_EDGE = "REMOVE_EDGE";
 
 export const GREEK = {
   "lalpha": "&#x1D6C2;",

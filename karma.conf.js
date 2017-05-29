@@ -33,8 +33,7 @@ module.exports = function(config) {
       reporters: [
         { type: 'text' },
         { type: 'text-summary' }
-      ],
-      check: { global: { excludes: ['node_modules/**/*.js'] } }
+      ]
     },
 
     frameworks: ['mocha'],

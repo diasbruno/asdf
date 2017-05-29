@@ -60,7 +60,7 @@ input[type=text] {
     left: 0;
     padding: 5px 8px;
     width: initial;
-    background-color: #fff;
+    background-color: #000;
     color: #ccc;
     border: 1px solid #ccc;
 }
@@ -76,7 +76,8 @@ input[type=text] {
 
 .node.selected {
     border: 1px solid #333;
-    color: #333;
+    background-color: #333;
+    color: #fff;
 }
 
 .node .close {
@@ -89,4 +90,16 @@ input[type=text] {
 
 .node input[type=text] {
     color: #000;
+}
+
+.var {
+    color: #f0f;
+}
+
+.constr {
+    color: #f00;
+}
+
+.str {
+    color: #0fc;
 }

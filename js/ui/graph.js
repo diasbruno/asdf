@@ -10,6 +10,26 @@ import {
   GREEK
 } from 'app/constants';
 
+function algebraType(expr) {
+  return expr.cata({
+    Ty: (n) => <span className="constr">{n}</span>
+  });
+}
+
+function algebraIdent(expr) {
+  return expr.value;
+}
+
+function algebraLit(expr) {
+  return expr.cata({
+    Literal: (x, a) => <span><span className="str">{x}</span> :: {algebraType(a)}</span>,
+    Constr: (x) => <span className="constr">{algebraIdent(x)}</span>,
+    Var: (x) => <span className="var">{algebraIdent(x)}</span>
+  });
+}
+
+const render = algebraLit;
+
 function createNode() {
   return { type: CREATE_NODE };
 }
@@ -31,9 +51,19 @@ function removeNode(nid) {
 }
 
 let graphFrame = { top: 0, left: 0, right: 0, bottom: 0 };
-let domNode = null;
+let domNode = [];
 let initPoX = 0;
 let initPoY = 0;
+
+function moveNodes(event) {
+  const fY = event.pageY - initPoY - graphFrame.top;
+  const fX = event.pageX - initPoX - graphFrame.left;
+  domNode.map(node => {
+    const nodeFrame = node.getBoundingClientRect();
+    node.style.top = px(clamp(0, fY, graphFrame.height - nodeFrame.height));
+    node.style.left = px(clamp(0, fX, graphFrame.width - nodeFrame.width));
+  });
+}
 
 const px = value => value + "px";
 
@@ -50,7 +80,7 @@ const Node = connect(
   }
 
   forwardRemove = () => {
-    domNode = null;
+    domNode = [];
     this.setState({
       ...this.state,
       isdragging: false
@@ -61,14 +91,7 @@ const Node = connect(
   }
 
   mouseMove = (event) => {
-    if (domNode) {
-      const node = findDOMNode(this);
-      const fY = event.pageY - initPoY - graphFrame.top;
-      const fX = event.pageX - initPoX - graphFrame.left;
-      const nodeFrame = node.getBoundingClientRect();
-      domNode.style.top = px(clamp(0, fY, graphFrame.height - nodeFrame.height));
-      domNode.style.left = px(clamp(0, fX, graphFrame.width - nodeFrame.width));
-    }
+    (domNode.length > 0) && moveNodes(event);
   }
 
   selectNode = (event) => {
@@ -80,12 +103,13 @@ const Node = connect(
     const nodeFrame = node.getBoundingClientRect();
     const { isdragging } = this.state;
 
+    initPoX = event.pageX - nodeFrame.left;
+    initPoY = event.pageY - nodeFrame.top;
+
     if (!isdragging) {
-      domNode = node;
-      initPoX = event.pageX - nodeFrame.left;
-      initPoY = event.pageY - nodeFrame.top;
+      domNode = domNode.concat([node]);
     } else {
-      domNode = null;
+      domNode = _.filter(domNode, n => n != node);
       initPoX = 0;
       initPoY = 0;
     }
@@ -94,8 +118,10 @@ const Node = connect(
       ...this.state,
       isdragging: !isdragging
     }, () => {
-      const toggleListener = isdragging ? 'removeEventListener' : 'addEventListener';
-      document.body[toggleListener]('mousemove', this.mouseMove);
+      if (domNode.length > 0) {
+        const toggleListener = isdragging ? 'removeEventListener' : 'addEventListener';
+        document.body[toggleListener]('mousemove', this.mouseMove);
+      }
     });
   }
 
@@ -108,7 +134,7 @@ const Node = connect(
            onMouseDown={this.toggleDragging}
            onMouseUp={this.toggleDragging}
            onClick={this.selectNode}>
-        <span>{text}</span>
+        <span>{this.props.expr && render(this.props.expr)}</span>
       </div>
     );
   }
@@ -169,13 +195,19 @@ const GraphView = connect(
     return (
       <div>
         <input className="pure-input" type="text" name="text" onKeyDown={(event) => {
-            let text = actualInputValue(event);
-            const word = /\:([A-Za-z0-9]+)/.exec(text);
-            if (word && word[1] in GREEK) {
-              text = text.replace(":"+word[1], GREEK[word[1]]);
-              event.target.value = text;
+            const nid = this.props.selected[0];
+
+            let text = event.target.value;
+
+            if (event.nativeEvent.keyCode == 13) {
+              const word = /\:([A-Za-z0-9]+)/.exec(text);
+              if (word && word[1] in GREEK) {
+                text = text.replace(":"+word[1], GREEK[word[1]]);
+
+              }
+              updateNodeText(nid, text);
+              event.target.value = "";
             }
-            selected.chain(nid => updateNodeText(nid, text));
           }} />
           <div className="pure-g">
             <button className="pure-button" onClick={createNode}>Add</button>

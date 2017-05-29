@@ -10,8 +10,10 @@ import LogMonitor from 'redux-devtools-log-monitor';
 import DockMonitor from 'redux-devtools-dock-monitor';
 import {
   CREATE_NODE, REMOVE_NODE, UPDATE_NODE_TEXT,
-  SELECTED_NODE, DESELECTED_NODE
+  SELECTED_NODE, DESELECTED_NODE,
+  CREATE_EDGE, REMOVE_EDGE
 } from 'app/constants';
+import { typer } from 'asdf/parser';
 
 // createDevTools takes a monitor and produces a DevTools component
 export const DevTools = createDevTools(
@@ -35,6 +37,7 @@ const initialState = {};
 
 const graphInitialState = {
   nodes: {},
+  edges: {},
   selected: []
 };
 
@@ -42,7 +45,7 @@ function graphState(state, action) {
   switch(action.type) {
   case CREATE_NODE: {
     const nid = unique();
-    const nodes = { ...state.nodes, [nid]: { nid, text: "" } };
+    const nodes = { ...state.nodes, [nid]: { nid, text: "", expr: null } };
     return { ...state, nodes };
   } break;
   case REMOVE_NODE: {
@@ -60,8 +63,12 @@ function graphState(state, action) {
   } break;
   case UPDATE_NODE_TEXT: {
     const { text, nid } = action;
-    const node = { ...state.nodes[nid], text: text };
+    const node = { ...state.nodes[nid], text: text, expr: typer(text)[0] };
     return { ...state, nodes: { ...state.nodes, [nid]: node } };
+  } break;
+  case CREATE_EDGE: {
+  } break;
+  case REMOVE_EDGE: {
   } break;
   }
   return graphInitialState;
